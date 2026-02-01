@@ -27,7 +27,23 @@ const loginUserZodSchema = z.object({
   }),
 });
 
+const changePasswordZodSchema = z.object({
+  body: z
+    .object({
+      oldPassword: z
+        .string()
+        .min(6, "Old Password must be at least 6 characters long"),
+      newPassword: z
+        .string()
+        .min(6, "New Password must be at least 6 characters long"),
+    })
+    .refine((data) => data.oldPassword !== data.newPassword, {
+      message: "New password must be different from old password",
+    }),
+});
+
 export const AuthValidation = {
   createUserZodSchema,
   loginUserZodSchema,
+  changePasswordZodSchema,
 };

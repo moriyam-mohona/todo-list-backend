@@ -2,7 +2,7 @@ import httpStatus from "http-status";
 import ApiError from "../../../errors/apiError";
 import prisma from "../../../lib/prisma";
 import { compareItem, hashItem } from "../../../utils/hashAndCompareItem";
-import { ILogin, IUser } from "./auth.interface";
+import { IChangePassword, ILogin, IUser } from "./auth.interface";
 import { jwtHelpers } from "../../../utils/jwtHelpers";
 import config from "../../../config";
 
@@ -91,7 +91,53 @@ const loginUser = async (loginData: ILogin) => {
   };
 };
 
+const changePassword = async (passwordData: IChangePassword) => {
+  const { userId, oldPassword, newPassword } = passwordData;
+
+  //Find user by id
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User Not Found");
+  }
+
+  //verify old pass
+  const isOldPassword = await compareItem(oldPassword, user.password);
+
+  if (!isOldPassword) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Old password is incorrect");
+  }
+
+  //prevent using same pass
+  const isSamePass = await compareItem(newPassword, user.password);
+
+  if (isSamePass) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "New password must be different from old password",
+    );
+  }
+
+  //hash new password
+  const hashedNewPassword = await hashItem(newPassword);
+
+  //update password
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      password: hashedNewPassword,
+    },
+  });
+
+  return {
+    message: "Password changed successfully",
+  };
+};
+
 export const AuthService = {
   createUser,
   loginUser,
+  changePassword,
 };
