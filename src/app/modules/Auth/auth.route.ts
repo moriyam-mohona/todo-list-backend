@@ -1,5 +1,4 @@
-import express, { Request, Response } from "express";
-import auth from "../../middlewares/auth";
+import express from "express";
 import { AuthController } from "./auth.controller";
 
 import { RequestValidation } from "../../middlewares/validateRequest";
@@ -8,11 +7,15 @@ import { AuthValidation } from "./auth.validation";
 const router = express.Router();
 
 router.post(
-  "/register",
+  "/signup",
   RequestValidation.validateRequest(AuthValidation.createUserZodSchema),
-  AuthController.createUser
+  AuthController.createUser,
 );
 
-router.get("/me", auth("USER"), AuthController.getMe);
+router.post(
+  "/login",
+  RequestValidation.validateRequest(AuthValidation.loginUserZodSchema),
+  AuthController.loginUser,
+);
 
 export const AuthRoutes = router;

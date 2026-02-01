@@ -1,21 +1,8 @@
 import { Request, Response } from "express";
-import httpStatus from "http-status";
 import catchAsync from "../../../shared/catchAsync";
-import sendResponse from "../../../shared/sendResponse";
 import { AuthService } from "./auth.service";
-
-const getMe = catchAsync(async (req: Request, res: Response): Promise<void> => {
-  const user = req.user;
-
-  const result = await AuthService.getMe(user?.id as string);
-
-  sendResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "User retrieved successfully",
-    data: result,
-  });
-});
+import sendResponse from "../../../shared/sendResponse";
+import httpStatus from "http-status";
 
 const createUser = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
@@ -32,7 +19,22 @@ const createUser = catchAsync(
   },
 );
 
+const loginUser = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const loginData = req.body;
+
+    const result = await AuthService.loginUser(loginData);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "User logged in successfully",
+      data: result,
+    });
+  },
+);
+
 export const AuthController = {
-  getMe,
   createUser,
+  loginUser,
 };
