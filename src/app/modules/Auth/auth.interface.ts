@@ -17,3 +17,11 @@ export interface IChangePassword {
   oldPassword: string;
   newPassword: string;
 }
+
+export interface IUpdateProfile {
+  userId: string;
+  firstName?: string;
+  lastName?: string;
+  contactNo?: string;
+  position?: string;
+}

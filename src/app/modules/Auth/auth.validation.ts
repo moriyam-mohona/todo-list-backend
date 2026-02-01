@@ -42,8 +42,22 @@ const changePasswordZodSchema = z.object({
     }),
 });
 
+const updateProfileZodSchema = z.object({
+  body: z.object({
+    firstName: z.string().min(1, "First name is required").optional(),
+    lastName: z.string().min(1, "Last name is required").optional(),
+    contactNo: z
+      .string()
+      .min(8, "Contact number is too short")
+      .max(15, "Contact number is too long")
+      .optional(),
+    position: z.string().min(2, "Position is too short").optional(),
+  }),
+});
+
 export const AuthValidation = {
   createUserZodSchema,
   loginUserZodSchema,
   changePasswordZodSchema,
+  updateProfileZodSchema,
 };

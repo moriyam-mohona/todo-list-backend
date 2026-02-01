@@ -28,4 +28,11 @@ router.patch(
 
 router.get("/get-me", authMiddleware, AuthController.getMe);
 
+router.patch(
+  "/update-profile",
+  authMiddleware,
+  RequestValidation.validateRequest(AuthValidation.updateProfileZodSchema),
+  AuthController.updateProfile,
+);
+
 export const AuthRoutes = router;

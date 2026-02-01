@@ -31,6 +31,8 @@ model User {
   password  String
   firstName String
   lastName  String
+  contactNo String?
+  position  String?
   isAgreed  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -2,7 +2,12 @@ import httpStatus from "http-status";
 import ApiError from "../../../errors/apiError";
 import prisma from "../../../lib/prisma";
 import { compareItem, hashItem } from "../../../utils/hashAndCompareItem";
-import { IChangePassword, ILogin, IUser } from "./auth.interface";
+import {
+  IChangePassword,
+  ILogin,
+  IUpdateProfile,
+  IUser,
+} from "./auth.interface";
 import { jwtHelpers } from "../../../utils/jwtHelpers";
 import config from "../../../config";
 
@@ -154,9 +159,39 @@ const getMe = async (userId: string) => {
   return user;
 };
 
+const updateProfile = async (payload: IUpdateProfile) => {
+  const { userId, ...updateData } = payload;
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+  // update only provided fields
+  const updatedData = await prisma.user.update({
+    where: { id: userId },
+    data: updateData,
+    select: {
+      id: true,
+      email: true,
+      userName: true,
+      firstName: true,
+      lastName: true,
+      contactNo: true,
+      position: true,
+      updatedAt: true,
+    },
+  });
+
+  return updatedData;
+};
+
 export const AuthService = {
   createUser,
   loginUser,
   changePassword,
   getMe,
+  updateProfile,
 };
