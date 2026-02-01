@@ -136,8 +136,27 @@ const changePassword = async (passwordData: IChangePassword) => {
   };
 };
 
+const getMe = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+  return user;
+};
+
 export const AuthService = {
   createUser,
   loginUser,
   changePassword,
+  getMe,
 };

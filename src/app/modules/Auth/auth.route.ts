@@ -26,4 +26,6 @@ router.patch(
   AuthController.changePassword,
 );
 
+router.get("/get-me", authMiddleware, AuthController.getMe);
+
 export const AuthRoutes = router;
