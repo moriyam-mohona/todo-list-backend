@@ -5,6 +5,7 @@ import responseTime from "response-time";
 import router from "./app/routes";
 import config from "./config";
 import logger from "./utils/logger/logger";
+import GlobalErrorHandler from "./app/middlewares/globalErrorHandler";
 
 // Initialize app
 const app: Application = express();
@@ -111,6 +112,8 @@ app.get("/api/v1/health", async (req: Request, res: Response) => {
     });
   }
 });
+
+app.use(GlobalErrorHandler);
 
 // 404 Not Found handler
 app.use((req: Request, res: Response, next: NextFunction) => {
