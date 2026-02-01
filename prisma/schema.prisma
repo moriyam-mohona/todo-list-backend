@@ -25,18 +25,20 @@ datasource db {
 // }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  userName  String   @unique
-  password  String
-  firstName String
-  lastName  String
-  contactNo String?
-  position  String?
-  isAgreed  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  tasks     Task[]
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
+  email      String     @unique
+  userName   String     @unique
+  password   String
+  firstName  String
+  lastName   String
+  contactNo  String?
+  position   String?
+  isAgreed   Boolean    @default(false)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  tasks      Task[]
+  priorities Priority[]
+  statuses   Status[]
 
   @@map("users")
 }
@@ -56,20 +58,26 @@ model Task {
   updatedAt   DateTime @updatedAt
 
   @@map("task")
-}
+} 
 
 model Priority {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name  String @unique
-  tasks Task[]
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String @unique
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+  tasks  Task[]
 
+  @@unique([name, userId])
   @@map("priorities")
 }
 
 model Status {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  name  String @unique
-  tasks Task[]
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String @unique
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+  tasks  Task[]
 
+  @@unique([name, userId])
   @@map("statuses")
 }
