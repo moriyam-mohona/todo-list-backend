@@ -2,6 +2,7 @@ import express from "express";
 import { AuthRoutes } from "../modules/Auth/auth.route";
 import { StatusRoutes } from "../modules/Status/status.routes";
 import { PriorityRoutes } from "../modules/Priority/priority.routes";
+import { TaskRoutes } from "../modules/Task/task.routes";
 
 const router = express.Router();
 
@@ -17,6 +18,10 @@ const moduleRoutes = [
   {
     path: "/priority",
     route: PriorityRoutes,
+  },
+  {
+    path: "/task",
+    route: TaskRoutes,
   },
 ];
 

@@ -169,6 +169,7 @@ const updateProfile = async (payload: IUpdateProfile) => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
+
   // update only provided fields
   const updatedData = await prisma.user.update({
     where: { id: userId },
@@ -176,6 +177,7 @@ const updateProfile = async (payload: IUpdateProfile) => {
     select: {
       id: true,
       email: true,
+      profileImage: true,
       userName: true,
       firstName: true,
       lastName: true,

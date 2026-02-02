@@ -3,6 +3,7 @@ import catchAsync from "../../../shared/catchAsync";
 import { AuthService } from "./auth.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
+import config from "../../../config";
 
 const createUser = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
@@ -69,12 +70,19 @@ const getMe = catchAsync(async (req, res) => {
 });
 
 const updateProfile = catchAsync(async (req, res) => {
-  const userId = req.user!.id;
+  const userId = req.user.id;
+  const data = req.body.data ? JSON.parse(req.body.data) : req.body.data;
+  const file = req.file;
 
-  const result = await AuthService.updateProfile({
+  const profileImage = `${config.backend_url}/${file?.filename}`;
+
+  const payload = {
     userId,
-    ...req.body,
-  });
+    ...data,
+    profileImage,
+  };
+
+  const result = await AuthService.updateProfile(payload);
 
   sendResponse(res, {
     success: true,

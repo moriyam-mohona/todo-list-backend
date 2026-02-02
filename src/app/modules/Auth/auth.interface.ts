@@ -23,5 +23,6 @@ export interface IUpdateProfile {
   firstName?: string;
   lastName?: string;
   contactNo?: string;
+  profileImage?: string;
   position?: string;
 }

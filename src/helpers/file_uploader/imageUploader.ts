@@ -22,7 +22,7 @@ const ALLOWED_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
 const fileFilter = (
   req: Request,
   file: Express.Multer.File,
-  cb: multer.FileFilterCallback
+  cb: multer.FileFilterCallback,
 ) => {
   const ext = path.extname(file.originalname).toLowerCase();
 
@@ -69,6 +69,6 @@ export const imageUploader = multer({
   fileFilter,
   limits: {
     fileSize: 5 * 1024 * 1024, // 5MB
-    files: 1,
+    // files: 1,
   },
 });

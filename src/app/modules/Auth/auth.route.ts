@@ -4,8 +4,10 @@ import { AuthController } from "./auth.controller";
 import { RequestValidation } from "../../middlewares/validateRequest";
 import { AuthValidation } from "./auth.validation";
 import { authMiddleware } from "../../middlewares/auth.middleware";
+import { imageUploader } from "../../../helpers/file_uploader/imageUploader";
 
 const router = express.Router();
+const profileUploader = imageUploader.single("profileImage");
 
 router.post(
   "/register",
@@ -31,7 +33,8 @@ router.get("/get-me", authMiddleware, AuthController.getMe);
 router.patch(
   "/update-profile",
   authMiddleware,
-  RequestValidation.validateRequest(AuthValidation.updateProfileZodSchema),
+  profileUploader,
+  // RequestValidation.validateRequest(AuthValidation.updateProfileZodSchema),
   AuthController.updateProfile,
 );
 

@@ -6,6 +6,7 @@ import router from "./app/routes";
 import config from "./config";
 import logger from "./utils/logger/logger";
 import GlobalErrorHandler from "./app/middlewares/globalErrorHandler";
+import path from "path";
 
 // Initialize app
 const app: Application = express();
@@ -53,14 +54,14 @@ app.use(
       time < 100
         ? "VERY FAST"
         : time < 200
-        ? "FAST"
-        : time < 500
-        ? "NORMAL"
-        : time < 1000
-        ? "SLOW"
-        : time < 5000
-        ? "VERY_SLOW"
-        : "CRITICAL";
+          ? "FAST"
+          : time < 500
+            ? "NORMAL"
+            : time < 1000
+              ? "SLOW"
+              : time < 5000
+                ? "VERY_SLOW"
+                : "CRITICAL";
 
     // Skip logging for streaming requests to reduce noise
     if (!req.path.includes("/stream/")) {
@@ -85,8 +86,10 @@ app.use(
         alert: "SLOW_RESPONSE",
       });
     }
-  })
+  }),
 );
+
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 // Routes
 app.use("/api/v1", router);

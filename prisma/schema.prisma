@@ -8,20 +8,21 @@ datasource db {
 }
 
 model User {
-  id         String     @id @default(auto()) @map("_id") @db.ObjectId
-  email      String     @unique
-  userName   String     @unique
-  password   String
-  firstName  String
-  lastName   String
-  contactNo  String?
-  position   String?
-  isAgreed   Boolean    @default(false)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  tasks      Task[]
-  priorities Priority[]
-  statuses   Status[]
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  email        String     @unique
+  userName     String     @unique
+  password     String
+  firstName    String
+  lastName     String
+  contactNo    String?
+  position     String?
+  profileImage String?
+  isAgreed     Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  tasks        Task[]
+  priorities   Priority[]
+  statuses     Status[]
 
   @@map("users")
 }
@@ -29,14 +30,16 @@ model User {
 model Task {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
+  taskImage   String
+  isVital     Boolean  @default(false)
   date        DateTime
   description String
   priorityId  String   @db.ObjectId
   priority    Priority @relation(fields: [priorityId], references: [id])
   statusId    String   @db.ObjectId
   status      Status   @relation(fields: [statusId], references: [id])
-  userId      String?  @db.ObjectId
-  user        User?    @relation(fields: [userId], references: [id])
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

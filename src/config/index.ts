@@ -18,6 +18,8 @@ export default {
     jwt_secret: process.env.JWT_SECRET as Secret,
     expires_in: process.env.EXPIRES_IN as SignOptions["expiresIn"],
     refresh_token_secret: process.env.REFRESH_TOKEN_SECRET as Secret,
-    refresh_token_expires_in: process.env.REFRESH_TOKEN_EXPIRES_IN as SignOptions["expiresIn"],
+    refresh_token_expires_in: process.env
+      .REFRESH_TOKEN_EXPIRES_IN as SignOptions["expiresIn"],
   },
+  backend_url: process.env.BACKEND_URL,
 };
