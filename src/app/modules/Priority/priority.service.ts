@@ -38,7 +38,67 @@ const getAllMyPriority = async (userId: string) => {
   });
 };
 
+const getSinglePriority = async (priorityId: string) => {
+  const priority = await prisma.priority.findUnique({
+    where: { id: priorityId },
+  });
+
+  if (!priority) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Priority not found");
+  }
+
+  return priority;
+};
+
+const updatePriority = async (
+  userId: string,
+  priorityId: string,
+  priority: string,
+) => {
+  const isPriority = await prisma.priority.findUnique({
+    where: { id: priorityId },
+  });
+
+  if (!isPriority) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Priority not found");
+  }
+
+  if (isPriority.userId != userId) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "User not found");
+  }
+
+  const update = await prisma.priority.update({
+    where: { id: priorityId },
+    data: {
+      priority: priority,
+    },
+  });
+
+  return update;
+};
+
+const deletePriority = async (priorityId: string, userId: string) => {
+  const isPriority = await prisma.priority.findUnique({
+    where: { id: priorityId },
+  });
+  if (!isPriority) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Priority not found");
+  }
+
+  if (isPriority.userId != userId) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "User not found");
+  }
+
+  const deletePriority = await prisma.priority.delete({
+    where: { id: priorityId },
+  });
+  return deletePriority;
+};
+
 export const PriorityService = {
   createPriority,
   getAllMyPriority,
+  getSinglePriority,
+  updatePriority,
+  deletePriority,
 };

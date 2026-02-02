@@ -13,5 +13,22 @@ router.post(
   PriorityController.createPriority,
 );
 router.get("/all", authMiddleware, PriorityController.getAllMyPriority);
+router.get(
+  "/:priorityId",
+  authMiddleware,
+  PriorityController.getSinglePriority,
+);
+router.patch(
+  "/:priorityId",
+  authMiddleware,
+  RequestValidation.validateRequest(PriorityValidation.updatePriorityZodSchema),
+  PriorityController.updatePriority,
+);
+
+router.delete(
+  "/:priorityId",
+  authMiddleware,
+  PriorityController.deletePriority,
+);
 
 export const PriorityRoutes = router;

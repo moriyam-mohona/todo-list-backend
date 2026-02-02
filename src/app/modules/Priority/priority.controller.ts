@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
 import { PriorityService } from "./priority.service";
 import sendResponse from "../../../shared/sendResponse";
+import { send } from "node:process";
 
 const createPriority = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
@@ -37,7 +38,62 @@ const getAllMyPriority = catchAsync(
   },
 );
 
+const getSinglePriority = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const priorityId = req.params.priorityId;
+
+    const result = await PriorityService.getSinglePriority(
+      priorityId as string,
+    );
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Priority fetched successfully",
+      data: result,
+    });
+  },
+);
+
+const updatePriority = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const userId = req.user.id;
+    const priorityId = req.params.priorityId;
+    const priority = req.body.priority;
+
+    const result = await PriorityService.updatePriority(
+      userId as string,
+      priorityId as string,
+      priority as string,
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Priority updated successfully",
+      data: result,
+    });
+  },
+);
+
+const deletePriority = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const userId = req.user.id;
+    const priorityId = req.params.priorityId as string;
+    const result = await PriorityService.deletePriority(priorityId, userId);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Priority deleted successfully",
+      data: result,
+    });
+  },
+);
+
 export const PriorityController = {
   createPriority,
   getAllMyPriority,
+  getSinglePriority,
+  updatePriority,
+  deletePriority,
 };
