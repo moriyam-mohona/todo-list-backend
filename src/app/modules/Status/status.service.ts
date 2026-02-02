@@ -85,9 +85,29 @@ const updateStatus = async (data: IUpdateStatus) => {
   return updatedData;
 };
 
+const deleteStatus = async (userId: string, statusId: string) => {
+  const isStatus = await prisma.status.findUnique({
+    where: {
+      id: statusId,
+    },
+  });
+  if (!isStatus) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Status not found");
+  }
+
+  if (isStatus.userId != userId) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "UNAUTHORIZED");
+  }
+
+  return await prisma.status.delete({
+    where: { id: statusId },
+  });
+};
+
 export const StatusService = {
   createStatus,
   getAllStatus,
   getSingleStatus,
   updateStatus,
+  deleteStatus,
 };

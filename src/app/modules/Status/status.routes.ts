@@ -24,4 +24,6 @@ router.patch(
   StatusController.updateStatus,
 );
 
+router.delete("/:statusId", authMiddleware, StatusController.deleteStatus);
+
 export const StatusRoutes = router;

@@ -3,7 +3,6 @@ import { StatusService } from "./status.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import { Request, Response } from "express";
-import { IUpdateStatus } from "./status.interface";
 
 const createStatus = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
@@ -74,9 +73,26 @@ const updateStatus = catchAsync(
   },
 );
 
+const deleteStatus = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const userId = req.user.id;
+    const statusId = req.params.statusId as string;
+
+    const result = await StatusService.deleteStatus(userId, statusId);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Status deleted successfully",
+      data: result,
+    });
+  },
+);
+
 export const StatusController = {
   createStatus,
   getAllStatus,
   getSingleStatus,
   updateStatus,
+  deleteStatus,
 };
