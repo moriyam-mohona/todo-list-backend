@@ -6,9 +6,9 @@ import httpStatus from "http-status";
 const createStatus = async (data: ICreateStatus) => {
   const isExist = await prisma.status.findUnique({
     where: {
-      name_userId: {
+      status_userId: {
         userId: data.userId,
-        name: data.name,
+        status: data.status,
       },
     },
   });
@@ -19,12 +19,12 @@ const createStatus = async (data: ICreateStatus) => {
 
   const status = await prisma.status.create({
     data: {
-      name: data.name,
+      status: data.status,
       userId: data.userId,
     },
     select: {
       id: true,
-      name: true,
+      status: true,
     },
   });
   return status;
@@ -35,7 +35,7 @@ const getAllStatus = async (userId: string) => {
     where: { userId },
     select: {
       id: true,
-      name: true,
+      status: true,
     },
     orderBy: {
       createdAt: "asc",
@@ -79,7 +79,7 @@ const updateStatus = async (data: IUpdateStatus) => {
     where: {
       id: data.statusId,
     },
-    data: { name: data.name },
+    data: { status: data.status },
   });
 
   return updatedData;

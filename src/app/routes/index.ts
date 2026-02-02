@@ -1,6 +1,7 @@
 import express from "express";
 import { AuthRoutes } from "../modules/Auth/auth.route";
 import { StatusRoutes } from "../modules/Status/status.routes";
+import { PriorityRoutes } from "../modules/Priority/priority.routes";
 
 const router = express.Router();
 
@@ -12,6 +13,10 @@ const moduleRoutes = [
   {
     path: "/status",
     route: StatusRoutes,
+  },
+  {
+    path: "/priority",
+    route: PriorityRoutes,
   },
 ];
 

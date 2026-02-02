@@ -1,10 +1,10 @@
 export interface ICreateStatus {
   userId: string;
-  name: string;
+  status: string;
 }
 
 export interface IUpdateStatus {
   userId: string;
   statusId: string;
-  name: string;
+  status: string;
 }

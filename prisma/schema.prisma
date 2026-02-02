@@ -7,23 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// model User {
-//   id       String  @id @default(auto()) @map("_id") @db.ObjectId
-//   email    String  @unique
-//   password String
-//   name     String?
-//   posts    Post[]
-// }
-
-// model Post {
-//   id        String  @id @default(auto()) @map("_id") @db.ObjectId
-//   title     String
-//   content   String?
-//   published Boolean @default(false)
-//   author    User    @relation(fields: [authorId], references: [id])
-//   authorId  String  @db.ObjectId
-// }
-
 model User {
   id         String     @id @default(auto()) @map("_id") @db.ObjectId
   email      String     @unique
@@ -61,25 +44,27 @@ model Task {
 }
 
 model Priority {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  name   String @unique
-  userId String @db.ObjectId
-  user   User   @relation(fields: [userId], references: [id])
-  tasks  Task[]
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  priority  String   @unique
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  tasks     Task[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
-  @@unique([name, userId])
+  @@unique([priority, userId])
   @@map("priorities")
 }
 
 model Status {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String 
+  status    String
   userId    String   @db.ObjectId
   user      User     @relation(fields: [userId], references: [id])
   tasks     Task[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([name, userId])
+  @@unique([status, userId])
   @@map("statuses")
 }

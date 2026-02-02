@@ -10,7 +10,7 @@ const createStatus = catchAsync(
 
     const result = await StatusService.createStatus({
       userId,
-      name: req.body.name,
+      status: req.body.status,
     });
 
     sendResponse(res, {
@@ -60,9 +60,9 @@ const updateStatus = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const userId = req.user.id;
     const statusId = req.params.statusId as string;
-    const name = req.body.name;
+    const status = req.body.status;
 
-    const result = await StatusService.updateStatus({ userId, name, statusId });
+    const result = await StatusService.updateStatus({ userId, status, statusId });
 
     sendResponse(res, {
       success: true,
