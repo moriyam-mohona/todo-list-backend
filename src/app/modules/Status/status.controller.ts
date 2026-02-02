@@ -3,6 +3,7 @@ import { StatusService } from "./status.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import { Request, Response } from "express";
+import { IUpdateStatus } from "./status.interface";
 
 const createStatus = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
@@ -37,25 +38,45 @@ const getAllStatus = catchAsync(
   },
 );
 
-const getSingleStatus = catchAsync(async (req, res): Promise<void> => {
-  const userId = req.user.id;
-  const statusId = req.params.statusId;
+const getSingleStatus = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const userId = req.user.id;
+    const statusId = req.params.statusId;
 
-  const result = await StatusService.getSingleStatus(
-    statusId as string,
-    userId,
-  );
+    const result = await StatusService.getSingleStatus(
+      statusId as string,
+      userId,
+    );
 
-  sendResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "Status fetched successfully",
-    data: result,
-  });
-});
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Status fetched successfully",
+      data: result,
+    });
+  },
+);
+
+const updateStatus = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const userId = req.user.id;
+    const statusId = req.params.statusId as string;
+    const name = req.body.name;
+
+    const result = await StatusService.updateStatus({ userId, name, statusId });
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Status updated successfully",
+      data: result,
+    });
+  },
+);
 
 export const StatusController = {
   createStatus,
   getAllStatus,
   getSingleStatus,
+  updateStatus,
 };

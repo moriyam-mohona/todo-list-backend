@@ -1,6 +1,6 @@
 import ApiError from "../../../errors/apiError";
 import prisma from "../../../lib/prisma";
-import { ICreateStatus } from "./status.interface";
+import { ICreateStatus, IUpdateStatus } from "./status.interface";
 import httpStatus from "http-status";
 
 const createStatus = async (data: ICreateStatus) => {
@@ -60,8 +60,34 @@ const getSingleStatus = async (statusId: string, userId: string) => {
   return status;
 };
 
+const updateStatus = async (data: IUpdateStatus) => {
+  const isStatus = await prisma.status.findUnique({
+    where: {
+      id: data.statusId,
+    },
+  });
+
+  if (!isStatus) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Status not found");
+  }
+
+  if (isStatus.userId != data.userId) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "UNAUTHORIZED");
+  }
+
+  const updatedData = await prisma.status.update({
+    where: {
+      id: data.statusId,
+    },
+    data: { name: data.name },
+  });
+
+  return updatedData;
+};
+
 export const StatusService = {
   createStatus,
   getAllStatus,
   getSingleStatus,
+  updateStatus,
 };

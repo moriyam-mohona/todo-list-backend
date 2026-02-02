@@ -14,6 +14,14 @@ router.post(
 );
 
 router.get("/all", authMiddleware, StatusController.getAllStatus);
+
 router.get("/:statusId", authMiddleware, StatusController.getSingleStatus);
+
+router.patch(
+  "/:statusId",
+  authMiddleware,
+  RequestValidation.validateRequest(StatusValidation.updateStatusZodSchema),
+  StatusController.updateStatus,
+);
 
 export const StatusRoutes = router;
