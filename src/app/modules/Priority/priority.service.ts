@@ -25,6 +25,20 @@ const createPriority = async (data: ICreatePriority) => {
   });
 };
 
+const getAllMyPriority = async (userId: string) => {
+  return await prisma.priority.findMany({
+    where: { userId },
+    select: {
+      id: true,
+      priority: true,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+};
+
 export const PriorityService = {
   createPriority,
+  getAllMyPriority,
 };

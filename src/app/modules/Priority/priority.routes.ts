@@ -12,5 +12,6 @@ router.post(
   RequestValidation.validateRequest(PriorityValidation.createPriorityZodSchema),
   PriorityController.createPriority,
 );
+router.get("/all", authMiddleware, PriorityController.getAllMyPriority);
 
 export const PriorityRoutes = router;

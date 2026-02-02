@@ -23,6 +23,21 @@ const createPriority = catchAsync(
   },
 );
 
+const getAllMyPriority = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const userId = req.user.id;
+
+    const result = await PriorityService.getAllMyPriority(userId);
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "All my priorities fetched successfully",
+      data: result,
+    });
+  },
+);
+
 export const PriorityController = {
   createPriority,
+  getAllMyPriority,
 };
