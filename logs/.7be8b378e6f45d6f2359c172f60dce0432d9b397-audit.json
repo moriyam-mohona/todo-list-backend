@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "D:\\Personal\\todo-list-backend\\logs\\.7be8b378e6f45d6f2359c172f60dce0432d9b397-audit.json",
+    "files": [
+        {
+            "date": 1770005213196,
+            "name": "D:\\Personal\\todo-list-backend\\logs\\info-2026-02-02.log",
+            "hash": "f7660191dd754eaf6eee94d4a97e42f6b35eeba895e0c32608e06a2d412e4b66"
+        }
+    ],
+    "hashType": "sha256"
+}
