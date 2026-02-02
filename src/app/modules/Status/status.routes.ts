@@ -13,6 +13,7 @@ router.post(
   StatusController.createStatus,
 );
 
-router.get("/all", authMiddleware, StatusController.getAppStatus);
+router.get("/all", authMiddleware, StatusController.getAllStatus);
+router.get("/:statusId", authMiddleware, StatusController.getSingleStatus);
 
 export const StatusRoutes = router;

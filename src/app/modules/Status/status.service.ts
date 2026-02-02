@@ -4,9 +4,12 @@ import { ICreateStatus } from "./status.interface";
 import httpStatus from "http-status";
 
 const createStatus = async (data: ICreateStatus) => {
-  const isExist = await prisma.status.findFirst({
+  const isExist = await prisma.status.findUnique({
     where: {
-      name: data.name,
+      name_userId: {
+        userId: data.userId,
+        name: data.name,
+      },
     },
   });
 
@@ -20,6 +23,7 @@ const createStatus = async (data: ICreateStatus) => {
       userId: data.userId,
     },
     select: {
+      id: true,
       name: true,
     },
   });
@@ -41,7 +45,23 @@ const getAllStatus = async (userId: string) => {
   return statuses;
 };
 
+const getSingleStatus = async (statusId: string, userId: string) => {
+  const status = await prisma.status.findUnique({
+    where: {
+      id: statusId,
+      userId: userId,
+    },
+  });
+
+  if (!status) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Status not found");
+  }
+
+  return status;
+};
+
 export const StatusService = {
   createStatus,
   getAllStatus,
+  getSingleStatus,
 };

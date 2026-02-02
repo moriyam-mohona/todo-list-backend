@@ -22,7 +22,7 @@ const createStatus = catchAsync(
   },
 );
 
-const getAppStatus = catchAsync(
+const getAllStatus = catchAsync(
   async (req: Request, res: Response): Promise<void> => {
     const userId = req.user.id;
 
@@ -37,7 +37,25 @@ const getAppStatus = catchAsync(
   },
 );
 
+const getSingleStatus = catchAsync(async (req, res): Promise<void> => {
+  const userId = req.user.id;
+  const statusId = req.params.statusId;
+
+  const result = await StatusService.getSingleStatus(
+    statusId as string,
+    userId,
+  );
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Status fetched successfully",
+    data: result,
+  });
+});
+
 export const StatusController = {
   createStatus,
-  getAppStatus,
+  getAllStatus,
+  getSingleStatus,
 };
