@@ -6,10 +6,15 @@ const taskCreateZodSchema = z.object({
       .string()
       .min(1, "Title is required")
       .max(100, "Title must be under 100 characters"),
-    taskImage: z.string().url("Task image must be a valid URL"),
+    taskImage: z.string().url(),
     description: z.string().min(1, "Description is required"),
-    priority: z.string().min(1, "Priority is required"),
-    status: z.string().min(1, "Status is required"),
+    priorityId: z.string().min(1, "Priority is required"),
+    statusId: z.string().min(1, "Status is required"),
+    date: z.coerce
+      .date()
+      .refine((val) => val.getTime() >= Date.now() - 60000, {
+        message: "Date cannot be in the past",
+      }),
     isVital: z.boolean().optional(),
   }),
 });
