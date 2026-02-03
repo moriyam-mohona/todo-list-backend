@@ -20,4 +20,11 @@ router.patch(
 
 router.delete("/:taskId", authMiddleware, TaskController.deleteTask);
 
+router.patch(
+  "/:taskId",
+  authMiddleware,
+  taskUploader,
+  TaskController.updateTask,
+);
+
 export const TaskRoutes = router;

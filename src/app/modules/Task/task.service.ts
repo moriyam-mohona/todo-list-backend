@@ -143,10 +143,25 @@ const deleteTask = async (taskId: string, userId: string) => {
   return deletedTask;
 };
 
+const updateTask = async (taskId: string, payload: Partial<ICreateTask>) => {
+  const task = await prisma.task.findUnique({
+    where: { id: taskId },
+  });
+  if (!task) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Task not found");
+  }
+  const updatedTask = await prisma.task.update({
+    where: { id: taskId },
+    data: payload,
+  });
+  return updatedTask;
+};
+
 export const TaskService = {
   createTask,
   getAllMyTasks,
   getTaskDetails,
   updateVitalStatus,
   deleteTask,
+  updateTask,
 };

@@ -6,7 +6,7 @@ import { TaskService } from "./task.service";
 import httpStatus from "http-status";
 
 // Create Task
-const createTask = catchAsync(async (req, res) => {
+const createTask = catchAsync(async (req, res): Promise<void> => {
   const userId = req.user.id;
   const data = (req.body.data as ICreateTask)
     ? JSON.parse(req.body.data)
@@ -31,7 +31,7 @@ const createTask = catchAsync(async (req, res) => {
 });
 
 // get all my tasks
-const getAllMyTasks = catchAsync(async (req, res) => {
+const getAllMyTasks = catchAsync(async (req, res): Promise<void> => {
   const userId = req.user.id;
 
   const result = await TaskService.getAllMyTasks(userId);
@@ -50,7 +50,7 @@ const getAllMyTasks = catchAsync(async (req, res) => {
 });
 
 // get task details
-const getTaskDetails = catchAsync(async (req, res) => {
+const getTaskDetails = catchAsync(async (req, res): Promise<void> => {
   const taskId = req.params.taskId as string;
   const userId = req.user.id;
 
@@ -65,7 +65,7 @@ const getTaskDetails = catchAsync(async (req, res) => {
 });
 
 // update vital status
-const updateVitalStatus = catchAsync(async (req, res) => {
+const updateVitalStatus = catchAsync(async (req, res): Promise<void> => {
   const taskId = req.params.taskId as string;
   const userId = req.user.id;
   const { isVital } = req.body;
@@ -81,7 +81,7 @@ const updateVitalStatus = catchAsync(async (req, res) => {
 });
 
 // delete task
-const deleteTask = catchAsync(async (req, res) => {
+const deleteTask = catchAsync(async (req, res): Promise<void> => {
   const taskId = req.params.taskId as string;
   const userId = req.user.id;
 
@@ -95,10 +95,33 @@ const deleteTask = catchAsync(async (req, res) => {
   });
 });
 
+const updateTask = catchAsync(async (req, res): Promise<void> => {
+  const taskId = req.params.taskId as string;
+  const payload = (req.body.data as Partial<ICreateTask>)
+    ? JSON.parse(req.body.data)
+    : (req.body.data as Partial<ICreateTask>);
+  const file = req.file;
+
+  const taskImage = `${config.backend_url}/${file?.filename}`;
+
+  const result = await TaskService.updateTask(taskId, {
+    ...payload,
+    taskImage,
+  });
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Task updated successfully",
+    data: result,
+  });
+});
+
 export const TaskController = {
   createTask,
   getAllMyTasks,
   getTaskDetails,
   updateVitalStatus,
   deleteTask,
+  updateTask,
 };
