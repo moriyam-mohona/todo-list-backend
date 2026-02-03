@@ -80,9 +80,25 @@ const updateVitalStatus = catchAsync(async (req, res) => {
   });
 });
 
+// delete task
+const deleteTask = catchAsync(async (req, res) => {
+  const taskId = req.params.taskId as string;
+  const userId = req.user.id;
+
+  const result = await TaskService.deleteTask(taskId, userId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Task deleted successfully",
+    data: result,
+  });
+});
+
 export const TaskController = {
   createTask,
   getAllMyTasks,
   getTaskDetails,
   updateVitalStatus,
+  deleteTask,
 };

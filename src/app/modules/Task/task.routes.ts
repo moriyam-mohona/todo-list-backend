@@ -17,4 +17,7 @@ router.patch(
   authMiddleware,
   TaskController.updateVitalStatus,
 );
+
+router.delete("/:taskId", authMiddleware, TaskController.deleteTask);
+
 export const TaskRoutes = router;
