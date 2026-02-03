@@ -12,4 +12,9 @@ router.get("/my-tasks", authMiddleware, TaskController.getAllMyTasks);
 
 router.get("/:taskId", authMiddleware, TaskController.getTaskDetails);
 
+router.patch(
+  "/:taskId/vital-status",
+  authMiddleware,
+  TaskController.updateVitalStatus,
+);
 export const TaskRoutes = router;

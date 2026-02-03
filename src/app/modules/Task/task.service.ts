@@ -103,8 +103,33 @@ const getTaskDetails = async (taskId: string, userId: string) => {
   return task;
 };
 
+const updateVitalStatus = async (
+  taskId: string,
+  userId: string,
+  isVital: boolean,
+) => {
+  const task = await prisma.task.findUnique({
+    where: { id: taskId },
+  });
+
+  if (!task) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Task not found");
+  }
+
+  if (task.userId !== userId) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "You are not authorized");
+  }
+  const updatedTask = await prisma.task.update({
+    where: { id: taskId },
+    data: { isVital },
+  });
+
+  return updatedTask;
+};
+
 export const TaskService = {
   createTask,
   getAllMyTasks,
   getTaskDetails,
+  updateVitalStatus,
 };

@@ -41,9 +41,15 @@ const getAllMyTasks = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     message: "Tasks retrieved successfully",
     data: result,
+    meta: {
+      page: 1,
+      limit: result.length,
+      total: result.length,
+    },
   });
 });
 
+// get task details
 const getTaskDetails = catchAsync(async (req, res) => {
   const taskId = req.params.taskId as string;
   const userId = req.user.id;
@@ -58,8 +64,25 @@ const getTaskDetails = catchAsync(async (req, res) => {
   });
 });
 
+// update vital status
+const updateVitalStatus = catchAsync(async (req, res) => {
+  const taskId = req.params.taskId as string;
+  const userId = req.user.id;
+  const { isVital } = req.body;
+
+  const result = await TaskService.updateVitalStatus(taskId, userId, isVital);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Task vital status updated successfully",
+    data: result,
+  });
+});
+
 export const TaskController = {
   createTask,
   getAllMyTasks,
   getTaskDetails,
+  updateVitalStatus,
 };
