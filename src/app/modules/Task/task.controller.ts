@@ -30,6 +30,36 @@ const createTask = catchAsync(async (req, res) => {
   });
 });
 
+// get all my tasks
+const getAllMyTasks = catchAsync(async (req, res) => {
+  const userId = req.user.id;
+
+  const result = await TaskService.getAllMyTasks(userId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Tasks retrieved successfully",
+    data: result,
+  });
+});
+
+const getTaskDetails = catchAsync(async (req, res) => {
+  const taskId = req.params.taskId as string;
+  const userId = req.user.id;
+
+  const result = await TaskService.getTaskDetails(taskId, userId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Task details retrieved successfully",
+    data: result,
+  });
+});
+
 export const TaskController = {
   createTask,
+  getAllMyTasks,
+  getTaskDetails,
 };

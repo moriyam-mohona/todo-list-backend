@@ -6,12 +6,10 @@ import { imageUploader } from "../../../helpers/file_uploader/imageUploader";
 const router = express.Router();
 const taskUploader = imageUploader.single("taskImage");
 
-router.post(
-  "/create",
-  authMiddleware,
-  taskUploader,
-  // RequestValidation.validateRequest(TaskValidation.taskCreateZodSchema),
-  TaskController.createTask,
-);
+router.post("/create", authMiddleware, taskUploader, TaskController.createTask);
+
+router.get("/my-tasks", authMiddleware, TaskController.getAllMyTasks);
+
+router.get("/:taskId", authMiddleware, TaskController.getTaskDetails);
 
 export const TaskRoutes = router;
